@@ -1,14 +1,31 @@
 import {
-  Stack,
   Box,
   useColorMode,
   Heading,
   Divider,
   Flex,
   IconButton,
-  Text
 } from "@chakra-ui/core";
 import Head from "next/head";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import TodoList from "../components/todo-list";
+import { useState } from "react";
+
+const initial = Array.from({ length: 10 }, (v, k) => k).map((k) => {
+  return {
+    id: `id-${k}`,
+    title: `Todo ${k}`,
+    desc: `Description ${k}`,
+  };
+});
+
+function reorder(list, startIndex, endIndex) {
+  const result = [...list];
+  const [removed] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
+
+  return result;
+}
 
 function SwitchIcon() {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -23,47 +40,23 @@ function SwitchIcon() {
   );
 }
 
-function TodoItem({ title, desc, ...rest }) {
-  return (
-    <Box padding="5" shadow="md" borderWidth="1px" {...rest}>
-      <Heading fontSize="xl">{title}</Heading>
-      <Text marginTop={4}>{desc}</Text>
-    </Box>
-  );
-}
-
-function TodoList() {
-  return (
-    <Stack spacing="8" margin="4">
-      <TodoItem
-        title="Plan Money"
-        desc="The future can be even brighter but a goal without a plan is just a wish"
-      />
-      <TodoItem
-        title="Save Money"
-        desc="You deserve good things. With a whooping 10-15% interest rate per annum, grow your savings on your own terms with our completely automated process"
-      />
-      <TodoItem
-        title="Plan Money"
-        desc="The future can be even brighter but a goal without a plan is just a wish"
-      />
-      <TodoItem
-        title="Save Money"
-        desc="You deserve good things. With a whooping 10-15% interest rate per annum, grow your savings on your own terms with our completely automated process"
-      />
-      <TodoItem
-        title="Plan Money"
-        desc="The future can be even brighter but a goal without a plan is just a wish"
-      />
-      <TodoItem
-        title="Save Money"
-        desc="You deserve good things. With a whooping 10-15% interest rate per annum, grow your savings on your own terms with our completely automated process"
-      />
-    </Stack>
-  );
-}
-
 export default function Home() {
+  const [todos, setTodos] = useState(initial);
+
+  function onDragEnd(result) {
+    if (!result.destination) {
+      return;
+    }
+
+    if (result.destination.index === result.source.index) {
+      return;
+    }
+
+    setTodos((actualTodos) =>
+      reorder(actualTodos, result.source.index, result.destination.index)
+    );
+  }
+
   return (
     <div className="container">
       <Head>
@@ -80,7 +73,17 @@ export default function Home() {
             <SwitchIcon />
           </Flex>
           <Divider />
-          <TodoList />
+
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId="list">
+              {(provided) => (
+                <div ref={provided.innerRef} {...provided.droppableProps}>
+                  <TodoList todos={todos} />
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
         </Box>
       </main>
     </div>

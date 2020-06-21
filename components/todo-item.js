@@ -7,7 +7,7 @@ export default function TodoItem({ id, title, desc, index, ...rest }) {
   const color = { light: "black", dark: "white" };
 
   return (
-    <Draggable draggableId={id} index={index}>
+    <Draggable draggableId={id.toString()} index={index}>
       {(provided) => (
         <Box
           padding="5"

@@ -9,7 +9,7 @@ export default async function (req, res) {
       res.json(tasks.sort((a, b) => a.orderInt - b.orderInt));
       break;
     case "POST":
-      const task = await prisma.task.create({ data: req.body });
+      const task = await prisma.task.create({ data: JSON.parse(req.body) });
       res.json(task);
       break;
     default:

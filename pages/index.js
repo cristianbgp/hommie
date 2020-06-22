@@ -5,6 +5,7 @@ import {
   Divider,
   Flex,
   IconButton,
+  Spinner,
 } from "@chakra-ui/core";
 import Head from "next/head";
 import TodoList from "../components/todo-list";
@@ -40,7 +41,13 @@ export default function Home() {
             <SwitchIcon />
           </Flex>
           <Divider />
-          <SSRSuspense fallback={<p>Loading...</p>}>
+          <SSRSuspense
+            fallback={
+              <Flex alignItems="center" justifyContent="center">
+                <Spinner thickness="4px" size="xl" />
+              </Flex>
+            }
+          >
             <TodoList />
           </SSRSuspense>
         </Box>

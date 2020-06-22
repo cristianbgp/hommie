@@ -44,20 +44,23 @@ export default function TodoList() {
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="list">
         {(provided) => (
-          <div ref={provided.innerRef} {...provided.droppableProps}>
-            <Stack spacing="8" margin="4">
-              {tasksData.map((todo, index) => (
-                <TodoItem
-                  id={todo.id}
-                  title={todo.title}
-                  desc={todo.description}
-                  index={index}
-                  key={todo.id}
-                />
-              ))}
-            </Stack>
+          <Stack
+            spacing="8"
+            margin="4"
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+          >
+            {tasksData.map((todo, index) => (
+              <TodoItem
+                id={todo.id}
+                title={todo.title}
+                desc={todo.description}
+                index={index}
+                key={todo.id}
+              />
+            ))}
             {provided.placeholder}
-          </div>
+          </Stack>
         )}
       </Droppable>
     </DragDropContext>

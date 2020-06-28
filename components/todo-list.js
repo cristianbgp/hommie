@@ -1,4 +1,4 @@
-import { Stack } from "@chakra-ui/core";
+import { Stack, Text, Flex } from "@chakra-ui/core";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import useSWR from "swr";
 import TodoItem from "./todo-item";
@@ -38,6 +38,15 @@ export default function TodoList() {
         body: JSON.stringify({ orderInt: index }),
       });
     });
+  }
+
+  if (tasksData.length === 0) {
+    return (
+      <Flex justifyContent="center" alignItems="center" flexDirection="column" marginY="4">
+        <Text fontSize="xl">Nothing to see here</Text>
+        <Text fontSize="xl">Please add your first task</Text>
+      </Flex>
+    );
   }
 
   return (

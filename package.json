@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "studio": "npx prisma studio --experimental"
+    "studio": "npx prisma studio --experimental",
+    "migrate": "npx prismate migrate up --experimental"
   },
   "dependencies": {
     "@chakra-ui/core": "^0.8.0",

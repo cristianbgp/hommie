@@ -1,0 +1,10 @@
+{
+  "env": {
+    "DATABASE_URL": "@hommie-db-url"
+  },
+  "build": {
+    "env": {
+      "DATABASE_URL": "@hommie-db-url"
+    }
+  }
+}

@@ -1,10 +1,31 @@
-import { Box, Heading, Text, useColorMode } from "@chakra-ui/core";
+import { useState } from "react";
+import { Box, Text, useColorMode, Checkbox } from "@chakra-ui/core";
 import { Draggable } from "react-beautiful-dnd";
 
-export default function TodoItem({ id, title, desc, index, ...rest }) {
+export default function TodoItem({
+  id,
+  title,
+  desc,
+  finished,
+  index,
+  ...rest
+}) {
+  const [checkboxValue, setCheckboxValue] = useState(finished);
+  const [disableCheckbox, setDisableCheckbox] = useState(false);
   const { colorMode } = useColorMode();
   const bgColor = { light: "white", dark: "gray.800" };
   const color = { light: "black", dark: "white" };
+
+  function handleCheckbox(event) {
+    setDisableCheckbox(true);
+    fetch(`/api/tasks/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify({ finished: event.target.checked }),
+    }).then(() => {
+      setDisableCheckbox(false);
+      setCheckboxValue((actualCheckboxValue) => !actualCheckboxValue);
+    });
+  }
 
   return (
     <Draggable draggableId={id.toString()} index={index}>
@@ -20,12 +41,21 @@ export default function TodoItem({ id, title, desc, index, ...rest }) {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <Heading fontSize="xl" color={color[colorMode]}>
+          <Checkbox
+            variantColor="gray"
+            size="xl"
+            fontWeight="bold"
+            onChange={handleCheckbox}
+            isChecked={checkboxValue}
+            isDisabled={disableCheckbox}
+          >
             {title}
-          </Heading>
-          <Text marginTop={4} color={color[colorMode]}>
-            {desc}
-          </Text>
+          </Checkbox>
+          {desc && (
+            <Text marginTop={4} color={color[colorMode]}>
+              {desc}
+            </Text>
+          )}
         </Box>
       )}
     </Draggable>

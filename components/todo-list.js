@@ -42,7 +42,12 @@ export default function TodoList() {
 
   if (tasksData.length === 0) {
     return (
-      <Flex justifyContent="center" alignItems="center" flexDirection="column" marginY="4">
+      <Flex
+        justifyContent="center"
+        alignItems="center"
+        flexDirection="column"
+        marginY="4"
+      >
         <Text fontSize="xl">Nothing to see here</Text>
         <Text fontSize="xl">Please add your first task</Text>
       </Flex>
@@ -64,6 +69,7 @@ export default function TodoList() {
                 id={todo.id}
                 title={todo.title}
                 desc={todo.description}
+                finished={todo.finished}
                 index={index}
                 key={todo.id}
               />

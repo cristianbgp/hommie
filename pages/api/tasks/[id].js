@@ -19,6 +19,12 @@ export default async function handle(req, res) {
       });
       res.json(updatedTask);
       break;
+    case "DELETE":
+      const deletedTask = await prisma.task.delete({
+        where: { id: parseInt(taskId) },
+      });
+      res.json(deletedTask);
+      break;
     default:
       res.setHeader("Allow", ["GET", "PATCH"]);
       res.status(405).end(`Method ${req.method} Not Allowed`);

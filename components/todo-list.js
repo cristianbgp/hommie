@@ -72,6 +72,7 @@ export default function TodoList() {
                 finished={todo.finished}
                 index={index}
                 key={todo.id}
+                mutateTasks={mutateTasks}
               />
             ))}
             {provided.placeholder}

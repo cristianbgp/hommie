@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Text, useColorMode, Checkbox } from "@chakra-ui/core";
+import { Box, Text, useColorMode, Checkbox, IconButton } from "@chakra-ui/core";
 import { Draggable } from "react-beautiful-dnd";
 
 export default function TodoItem({
@@ -8,10 +8,12 @@ export default function TodoItem({
   desc,
   finished,
   index,
+  mutateTasks,
   ...rest
 }) {
   const [checkboxValue, setCheckboxValue] = useState(finished);
   const [disableCheckbox, setDisableCheckbox] = useState(false);
+  const [disableDelete, setDisableDelete] = useState(false);
   const { colorMode } = useColorMode();
   const bgColor = { light: "white", dark: "gray.800" };
   const color = { light: "black", dark: "white" };
@@ -27,6 +29,16 @@ export default function TodoItem({
     });
   }
 
+  function handleDelete() {
+    setDisableDelete(true);
+    fetch(`/api/tasks/${id}`, {
+      method: "DELETE",
+    }).then(() => {
+      setDisableDelete(false);
+      mutateTasks();
+    });
+  }
+
   return (
     <Draggable draggableId={id.toString()} index={index}>
       {(provided) => (
@@ -36,6 +48,7 @@ export default function TodoItem({
           borderWidth="1px"
           rounded="lg"
           backgroundColor={bgColor[colorMode]}
+          position="relative"
           {...rest}
           ref={provided.innerRef}
           {...provided.draggableProps}
@@ -56,6 +69,17 @@ export default function TodoItem({
               {desc}
             </Text>
           )}
+          <IconButton
+            size="sm"
+            fontSize="lg"
+            icon="delete"
+            variantColor="gray"
+            position="absolute"
+            top="5"
+            right="5"
+            isDisabled={disableDelete}
+            onClick={handleDelete}
+          />
         </Box>
       )}
     </Draggable>
